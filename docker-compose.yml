@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  restaurant_api:
+    container_name: restaurant_api
+    image: dockerhub-flask_live_app:1.0.0
+    build: .
+    ports:
+      - "5000:5000"
+volumes:
+  pgdata: {}
