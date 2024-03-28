@@ -16,3 +16,7 @@ python app.py
 - /api/restaurants  (GET|POST)
 - /api/restaurants/{id} (GET|PUT|DELETE)
 - /api/restaurants?city={city_name} (GET)
+
+### database
+
+SQLite
