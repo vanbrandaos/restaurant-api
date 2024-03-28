@@ -14,38 +14,47 @@ from schemas.restaurant import RestaurantSchema, restaurant_schema, restaurants_
 NOT_FOUND= "Restaurant not found."
 
 class RestaurantListResource(Resource):
-    def get(self):
+    def get(self,):
 
-        restaurants = Restaurant.query.all()
-        
+        restaurants = Restaurant.get_all()
+                
         if 'city' in request.args:      
-            city = request.args.get('city')
-            addresses = db.session().query(Address).filter_by(address_locality=city)
+            city = request.args.get('city')            
+            addresses = Address.find_by_city(city)
             restaurants = []
-            for address  in addresses:
-                restaurant = Restaurant.query.get_or_404(address.restaurant_id)
+            for address  in addresses:                
+                restaurant = Restaurant.find_by_id(address.restaurant_id)
                 restaurants.append(restaurant)                
-
         return restaurants_schema.dump(restaurants)
 
 
     def post(self):
 
         item_json = request.get_json()
-        restaurant_data = restaurant_schema.load(item_json) #includes validation 
-        db.session.add(restaurant_data)  
-        db.session.commit()
-        return restaurant_schema.dump(restaurant_data), 201 
+        try:
+            restaurant_data = restaurant_schema.load(item_json) 
+        except:
+            return {'message': "Missing a required data"}, 400
+
+        try:
+            Restaurant.insert(restaurant_data)
+            return restaurant_schema.dump(restaurant_data), 201 
+        except:
+            return {'message': "Internal Error"}, 500
 
 api.add_resource(RestaurantListResource, '/api/restaurants')
 
 class RestaurantResource(Resource):
     def get(self, restaurant_id):
-        restaurant = Restaurant.query.get_or_404(restaurant_id) #returns 404 if not exists         
-        return restaurant_schema.dump(restaurant), 200
+        restaurant = Restaurant.find_by_id(restaurant_id)
+        if restaurant:
+            return restaurant_schema.dump(restaurant), 200
+        return {'message': NOT_FOUND}, 404
 
     def put(self, restaurant_id):
-        restaurant = Restaurant.query.get_or_404(restaurant_id) #returns 404 if not exists    
+        restaurant = Restaurant.find_by_id(restaurant_id)
+        if not restaurant:
+            return {'message': NOT_FOUND}, 404
 
         if 'name' in request.json:
             restaurant.name = request.json['name']
@@ -75,9 +84,10 @@ class RestaurantResource(Resource):
         return restaurant_schema.dump(restaurant)
 
     def delete(self, restaurant_id):
-        restaurant = Restaurant.query.get_or_404(restaurant_id) #returns 404 if not exists    
-        db.session.delete(restaurant)
-        db.session.commit()        
+        restaurant = Restaurant.find_by_id(restaurant_id)
+        if not restaurant:
+            return {'message': NOT_FOUND}, 404
+        restaurant = Restaurant.remove(restaurant)        
         return '', 204
 
 api.add_resource(RestaurantResource, '/api/restaurants/<int:restaurant_id>')

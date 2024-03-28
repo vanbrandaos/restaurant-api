@@ -18,3 +18,9 @@ class Address(db.Model):
         'addressRegion': self.address_region,
         'addressCountry': self.address_country
         }                    
+
+
+
+    @classmethod
+    def find_by_city(self, city):
+        return db.session().query(Address).filter_by(address_locality=city)             

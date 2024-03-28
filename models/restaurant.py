@@ -27,3 +27,19 @@ class Restaurant(db.Model):
         self.menu = menu        
         self.telephone = telephone        
         self.price_range = price_range        
+
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.query.get(id)
+
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()
+
+    def insert(self,):
+        db.session.add(self)
+        db.session.commit()
+
+    def remove(self):
+        db.session.delete(self)
+        db.session.commit()
