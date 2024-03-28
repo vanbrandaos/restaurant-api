@@ -12,13 +12,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///restaurant.db'
 
 db.init_app(app)
 
-with app.app_context() as ctx:
-    ctx.push()
-    db.create_all()
 
-@app.before_request
-def create_tables():
-    db.create_all()
+# with app.app_context() as ctx:
+#     ctx.push()
+#     db.create_all()
+
+# @app.before_request
+# def create_tables():
+#     db.create_all()
 
 ma.init_app(app)
 api.init_app(app)
