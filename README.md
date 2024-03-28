@@ -11,3 +11,8 @@ exit() #exit python cli
 python app.py
 ```
 
+### resources:
+
+- /api/restaurants  (GET|POST)
+- /api/restaurants/{id} (GET|PUT|DELETE)
+- /api/restaurants?city={city_name} (GET)
