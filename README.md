@@ -1,5 +1,29 @@
 # restaurant-api
 
+### resources:
+**http://localhost:5000*
+
+- /api/restaurants  (GET|POST)
+- /api/restaurants/{id} (GET|PUT|DELETE)
+- /api/restaurants?city={city_name} (GET)
+
+### database
+
+SQLite
+
+# Run
+
+### Docker
+**Dependencies: docker / docker-compose*
+
+```bash
+cd restaurant-api
+docker compose up #-d 
+```
+
+
+### Local:
+**Dependencies: python3 / pip*
 ```python
 python -m venv env
 source env/bin/activate.fish
@@ -11,12 +35,3 @@ exit() #exit python cli
 python app.py
 ```
 
-### resources:
-
-- /api/restaurants  (GET|POST)
-- /api/restaurants/{id} (GET|PUT|DELETE)
-- /api/restaurants?city={city_name} (GET)
-
-### database
-
-SQLite
